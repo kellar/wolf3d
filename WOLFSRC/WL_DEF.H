@@ -1166,7 +1166,7 @@ void MovePWalls (void);
 void OpenDoor (int door);
 void PlaceItemType (int itemtype, int tilex, int tiley);
 void PushWall (int checkx, int checky, int dir);
-void OperateDoor (int door);
+void OpenDoorIfClosedAndUnlocked (int door);
 void InitAreas (void);
 
 /*

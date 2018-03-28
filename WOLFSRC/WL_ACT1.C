@@ -488,14 +488,14 @@ void CloseDoor (int door)
 /*
 =====================
 =
-= OperateDoor
+= OpenDoorIfClosedAndUnlocked
 =
-= The player wants to change the door's direction
+= The player wants to open door
 =
 =====================
 */
 
-void OperateDoor (int door)
+void OpenDoorIfClosedAndUnlocked (int door)
 {
 	int	lock;
 
@@ -514,10 +514,6 @@ void OperateDoor (int door)
 	case dr_closed:
 	case dr_closing:
 		OpenDoor (door);
-		break;
-	case dr_open:
-	case dr_opening:
-		CloseDoor (door);
 		break;
 	}
 }

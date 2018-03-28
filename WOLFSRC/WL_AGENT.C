@@ -1069,14 +1069,31 @@ void Cmd_Use (void)
 		SD_PlaySound (LEVELDONESND);
 		SD_WaitSoundDone();
 	}
-	else if (!buttonheld[bt_use] && doornum & 0x80)
-	{
-		buttonheld[bt_use] = true;
-		OperateDoor (doornum & ~0x80);
-	}
 	else
 		SD_PlaySound (DONOTHINGSND);
 
+}
+
+void AutoOpenDoor (void) {
+	static int lastx = -1, lasty = -1;
+	int checkx, checky;
+	int doornum;
+
+	if (lastx != player->tilex || lasty != player->tiley) {
+		// check all 9 tile surrounding and including the player for a door to open
+		for (checkx = player->tilex - 1; checkx <= player->tilex + 1; checkx++) {
+			for (checky = player->tiley - 1; checky < player->tiley + 1; checky++) {
+				doornum = tilemap[checkx][checky];
+				// 4 bits of tilemap represent doornum
+				if (doornum & 0x80) {
+					OpenDoorIfClosedAndUnlocked(doornum & ~0x80);
+				}
+			}
+		}
+	}
+
+	lastx = player->tilex;
+	lasty = player->tiley;
 }
 
 /*
@@ -1403,6 +1420,8 @@ void	T_Player (objtype *ob)
 
 	if ( buttonstate[bt_use] )
 		Cmd_Use ();
+
+	AutoOpenDoor();
 
 	if ( buttonstate[bt_attack] && !buttonheld[bt_attack])
 		Cmd_Fire ();
